@@ -1,17 +1,17 @@
-#include "hashing.h"
+#include "hashing_tutorial.h"
 
 void hashingTask(void *parameters)
 {
     /* Unused parameters. */
     (void)parameters;
 
-    printf("Hashing task started.\n");
+    printf("Hashing Tutorial Task Started.\n");
 
     Sha256 sha256;
     int ret;
     byte data[] = "Hello, World!";
-    word32 len = sizeof(data);
-    printf("Data: %s\n", data);
+    word32 len = strlen(data);
+    printf("Hashing...\tData: %s\tLen: %u\n", data, len);
     byte hash[WC_SHA256_DIGEST_SIZE] = {0x00};
 
     printf("Initializing hash context... ");
@@ -49,16 +49,12 @@ void hashingTask(void *parameters)
 
     /* Print the hash. */
     printf("Hash:\n");
-    // print_bytes((const char *)hash, WC_SHA256_DIGEST_SIZE);
-    for (int i = 0; i < WC_SHA256_DIGEST_SIZE; i++)
-    {
-        printf("%hhu", hash[i]);
-    }
-    printf("\n");
+    print_bytes((const uint8_t *)&hash, WC_SHA256_DIGEST_SIZE);
     printf("Hashing task finished.\n");
-    // Leave it to allow console print
+
+    // Leave it to flush stdout
+    fflush(stdout);
     for (;;)
     {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }

@@ -1,10 +1,8 @@
-#ifndef HASHING_H
-#define HASHING_H
+#ifndef HASHING_TUTORIAL_H
+#define HASHING_TUTORIAL_H
 
-// Set to 1 to enable hashing
-#define ENABLE_HASHING 1
-
-// Set to 1 to enable hashing debug output 1
+// Set to 1 to enable hashing tutorial
+#define ENABLE_HASHING_TUTORIAL 0
 
 /* FreeRTOS kernel includes. */
 #include "FreeRTOS.h"
@@ -23,4 +21,4 @@ static StackType_t hashingTaskStack[configMINIMAL_STACK_SIZE];
 
 void hashingTask(void *parameters);
 
-#endif
+#endif /* HASHING_TUTORIAL_H */

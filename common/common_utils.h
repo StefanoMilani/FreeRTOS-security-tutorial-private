@@ -1,8 +1,14 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <stdio.h>
+#define BYTES_PER_LINE 6
 
-void print_bytes(const char *bytes, int len);
+#include <stdio.h>
+#include <stdint.h>
+
+#include "wolfssl/wolfcrypt/random.h"
+
+void print_bytes(const uint8_t *bytes, int len);
+int generate_random_bytes(uint8_t *out, int len);
 
 #endif

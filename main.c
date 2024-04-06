@@ -14,14 +14,15 @@
 #include "task.h"
 
 /* Tutotial includes.*/
-#include "hashing.h"
+#include "hashing_tutorial.h"
+#include "aes_tutorial.h"
 
 void main(void)
 {
 
-    printf("IoT Course 2024\nFreeRTOS Security Tutorial\n");
+    printf("IoT Course 2024: FreeRTOS Security Tutorial\n");
 
-#if ENABLE_HASHING
+#if ENABLE_HASHING_TUTORIAL
     xTaskCreateStatic(hashingTask,
                       "hashing-tutorial",
                       configMINIMAL_STACK_SIZE,
@@ -29,7 +30,17 @@ void main(void)
                       configMAX_PRIORITIES - 1,
                       &(hashingTaskStack[0]),
                       &(hashingTaskTCB));
-#endif // ENABLE_HASHING
+#endif // ENABLE_HASHING_TUTORIAL
+
+#if ENABLE_AES_TUTORIAL
+    xTaskCreateStatic(aesTask,
+                      "aes-tutorial",
+                      configMINIMAL_STACK_SIZE,
+                      NULL,
+                      configMAX_PRIORITIES - 1,
+                      &(aesTaskStack[0]),
+                      &(aesTaskTCB));
+#endif // ENABLE_AES_TUTORIAL
 
     /* Start the scheduler. */
     vTaskStartScheduler();
