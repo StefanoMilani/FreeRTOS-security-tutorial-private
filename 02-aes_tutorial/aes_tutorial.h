@@ -2,7 +2,7 @@
 #define AES_TUTORIAL_H
 
 // Set to 1 to enable aes tutorial
-#define ENABLE_AES_TUTORIAL 1
+#define ENABLE_AES_TUTORIAL 0
 
 /* FreeRTOS kernel includes. */
 #include "FreeRTOS.h"

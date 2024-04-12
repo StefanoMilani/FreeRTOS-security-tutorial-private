@@ -1,0 +1,3 @@
+
+#define HAVE_CURVE25519
+#define CURVE25519_SMALL

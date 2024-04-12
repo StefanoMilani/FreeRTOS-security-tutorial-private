@@ -16,6 +16,7 @@
 /* Tutotial includes.*/
 #include "hashing_tutorial.h"
 #include "aes_tutorial.h"
+#include "ecc_tutorial.h"
 
 void main(void)
 {
@@ -41,6 +42,16 @@ void main(void)
                       &(aesTaskStack[0]),
                       &(aesTaskTCB));
 #endif // ENABLE_AES_TUTORIAL
+
+#if ENABLE_ECC_TUTORIAL
+    xTaskCreateStatic(eccTask,
+                      "ecc-tutorial",
+                      configMINIMAL_STACK_SIZE,
+                      NULL,
+                      configMAX_PRIORITIES - 1,
+                      &(eccTaskStack[0]),
+                      &(eccTaskTCB));
+#endif // ENABLE_ECC_TUTORIAL
 
     /* Start the scheduler. */
     vTaskStartScheduler();
