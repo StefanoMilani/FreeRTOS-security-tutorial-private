@@ -113,25 +113,31 @@ void aesTask(void *parameters)
     printf("DONE.\n");
     printf("Plaintext Decrypted Padded:\n");
     print_bytes(plaintext_decrypted_padded, ciphertext_len);
+    printf("\n");
     word32 plaintext_decrypted_len = strlen(plaintext_decrypted_padded);
     byte plaintext_decrypted[plaintext_decrypted_len];
     memcpy(plaintext_decrypted, plaintext_decrypted_padded, plaintext_len);
     printf("Plaintext Decrypted:\n");
     print_bytes(plaintext_decrypted, plaintext_len);
+    printf("\n");
     printf("Original Plaintext:\n");
     print_bytes(plaintext, plaintext_len);
+    printf("\n");
 
     if (memcmp(plaintext_decrypted, plaintext, plaintext_len) != 0)
     {
-        printf("Decrypted data does not match plaintext\n");
+        printf("Original plaintext and Decrypted data are different.\n");
     }
     else
     {
-        printf("Decrypted data matches plaintext\n");
+        printf("Original plaintext and Decrypted data are equals.\n");
     }
 
     // Free AES context
     wc_AesFree(&cbc_dec);
+
+    printf("\n");
+    printf("AES Tutorial Task Completed.\n");
 
     // Leave it to flush stdout
     fflush(stdout);

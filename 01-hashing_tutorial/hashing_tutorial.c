@@ -50,6 +50,8 @@ void hashingTask(void *parameters)
     /* Print the hash. */
     printf("Hash:\n");
     print_bytes((const uint8_t *)&hash, WC_SHA256_DIGEST_SIZE);
+    printf("\n");
+
     printf("Hashing task finished.\n");
 
     // Leave it to flush stdout

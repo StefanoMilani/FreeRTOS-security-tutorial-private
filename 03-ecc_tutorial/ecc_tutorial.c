@@ -122,6 +122,7 @@ void eccTask(void *parameter)
     }
     printf("The computed secrets are equals.\n");
 
+    printf("\n");
     printf("ECC Tutorial Task Completed.\n");
 
     // Leave it to flush stdout
