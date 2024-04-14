@@ -5,16 +5,26 @@ void aesTask(void *parameters)
 
     printf("AES Tutorial Task Started.\n");
 
+    byte plaintext[] = "Hello, World! And some other stuff to have a plaintext longer than the AES128 blocksize";
+    word32 plaintext_len = strlen(plaintext);
+    printf("Plaintext: %s\tLen: %u\n", plaintext, plaintext_len);
+
+    /*
+        Init the structs needed for encrypting and decrypting
+        using the AES algorithm in CBC mode.
+        NOTE: different structs are needed for encrypting and decrypting!
+    */
     Aes cbc_enc;
     Aes cbc_dec;
     void *hint = NULL;
     int devId = INVALID_DEVID; // if not using async INVALID_DEVID is default
-    byte plaintext[] = "Hello, World! And some other stuff to have a plaintext longer than the AES128 blocksize";
-    word32 plaintext_len = strlen(plaintext);
-    printf("Plaintext: %s\tLen: %u\n", plaintext, plaintext_len);
     int n = (plaintext_len / AES_BLOCK_SIZE) + 1;
 
-    // GENERATE KEY
+    /*
+        Generate a random key of size AES_128_KEY_SIZE.
+        NOTE: this key will be used for encrypting and decrypting.
+        NOTE: use the generate_random_bytes implemented in part 0.
+    */
     printf("Generating Key... ");
     byte key[AES_128_KEY_SIZE] = {0x00};
     if (generate_random_bytes((uint8_t *)key, AES_128_KEY_SIZE) != 0)
@@ -26,7 +36,11 @@ void aesTask(void *parameters)
     printf("Key:\n");
     print_bytes(key, AES_128_KEY_SIZE);
 
-    // GENERATE IV
+    /*
+        Generate a random IV of size AES_IV_SIZE.
+        NOTE: this IV will be used for encrypting and decrypting.
+        NOTE: use the generate_random_bytes implemented in part 0.
+    */
     printf("Generating IV... ");
     byte iv[AES_IV_SIZE] = {0x00};
     if (generate_random_bytes((uint8_t *)iv, AES_IV_SIZE) != 0)
@@ -37,11 +51,13 @@ void aesTask(void *parameters)
     printf("DONE.\n");
 
     /*
-     *  CBC ENCRYPTION MODE
-     */
+        CBC ENCRYPTION MODE
+    */
     printf("\nCBC ENCRYPTION MODE\n\n");
 
-    // INIT AES CONTEXT
+    /*
+        Init the structs needed for encrypting.
+    */
     printf("Initializing AES context... ");
     if (wc_AesInit(&cbc_enc, hint, devId) != 0)
     {
@@ -50,7 +66,9 @@ void aesTask(void *parameters)
     }
     printf("DONE.\n");
 
-    // SET KEY AND IV
+    /*
+        Update the encryption context with the key and IV.
+    */
     printf("Setting Key and IV... ");
     if (wc_AesSetKey(&cbc_enc, key, AES_128_KEY_SIZE, iv, AES_ENCRYPTION) != 0)
     {
@@ -59,7 +77,10 @@ void aesTask(void *parameters)
     }
     printf("DONE.\n");
 
-    // ENCRYPT DATA
+    /*
+        Encrypt the plaintext.
+        NOTE: the plaintext shall be padded to a multiple of AES_BLOCK_SIZE bytes!
+    */
     printf("Encrypting Data using CBC... ");
     word32 ciphertext_len = n * AES_BLOCK_SIZE;
     byte ciphertext[ciphertext_len]; // multiple of 16 bytes
@@ -73,10 +94,16 @@ void aesTask(void *parameters)
         return;
     }
     printf("DONE.\n");
+
+    /*
+        Print the ciphertext.
+    */
     printf("Ciphertext:\n");
     print_bytes(ciphertext, ciphertext_len);
 
-    // Free AES context
+    /*
+        Free the encryption AES context.
+    */
     wc_AesFree(&cbc_enc);
 
     /*
@@ -84,7 +111,9 @@ void aesTask(void *parameters)
      */
     printf("\nCBC DECRYPTION MODE\n\n");
 
-    // INIT AES CONTEXT
+    /*
+        Init the structs needed for decrypting.
+    */
     printf("Initializing AES context... ");
     if (wc_AesInit(&cbc_dec, hint, devId) != 0)
     {
@@ -93,7 +122,9 @@ void aesTask(void *parameters)
     }
     printf("DONE.\n");
 
-    // SET KEY AND IV
+    /*
+        Update the decryption context with the key and IV.
+    */
     printf("Setting Key and IV... ");
     if (wc_AesSetKey(&cbc_dec, key, AES_128_KEY_SIZE, iv, AES_DECRYPTION) != 0)
     {
@@ -102,7 +133,11 @@ void aesTask(void *parameters)
     }
     printf("DONE.\n");
 
-    // DECRYPT DATA
+    /*
+        Decrypt the plaintext.
+        NOTE: the result is padded to a multiple of AES_BLOCK_SIZE bytes!
+        NOTE: remove padding to obtain the plaintext.
+    */
     printf("Decrypting Data using CBC... ");
     byte plaintext_decrypted_padded[ciphertext_len];
     if (wc_AesCbcDecrypt(&cbc_dec, plaintext_decrypted_padded, (const byte *)ciphertext, ciphertext_len) != 0)
@@ -111,6 +146,15 @@ void aesTask(void *parameters)
         return;
     }
     printf("DONE.\n");
+
+    /*
+        Free the decryption AES context.
+    */
+    wc_AesFree(&cbc_dec);
+
+    /*
+        Print the plaintext.
+    */
     printf("Plaintext Decrypted Padded:\n");
     print_bytes(plaintext_decrypted_padded, ciphertext_len);
     printf("\n");
@@ -124,6 +168,9 @@ void aesTask(void *parameters)
     print_bytes(plaintext, plaintext_len);
     printf("\n");
 
+    /*
+        Compare the original plaintext with the decrypted plaintext.
+    */
     if (memcmp(plaintext_decrypted, plaintext, plaintext_len) != 0)
     {
         printf("Original plaintext and Decrypted data are different.\n");
@@ -132,9 +179,6 @@ void aesTask(void *parameters)
     {
         printf("Original plaintext and Decrypted data are equals.\n");
     }
-
-    // Free AES context
-    wc_AesFree(&cbc_dec);
 
     printf("\n");
     printf("AES Tutorial Task Completed.\n");
